@@ -123,6 +123,19 @@ async function run() {
             const result = await userCollection.find(query).toArray();
             res.send(result);
         });
+        app.get('/user-details/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const found = await userCollection.findOne(query);
+
+            if (found) {
+                res.send(found);
+            } else {
+                // Handle the case when the user with the given ID is not found.
+                res.status(404).send('User not found');
+            }
+        });
+
         // check instructor a user
         app.get('/users/instructor/:email', verifyJWT, async (req, res) => {
             const email = req.params.email;
