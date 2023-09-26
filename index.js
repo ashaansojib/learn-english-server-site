@@ -225,6 +225,7 @@ async function run() {
             const result = await classCollection.insertOne(allClass);
             res.send(result)
         });
+
         app.get('/classes/instructor/:email', verifyJWT, async (req, res) => {
             const email = req.params.email;
             const query = { email: email };
@@ -282,6 +283,12 @@ async function run() {
             const feedback = req.body;
             const result = await feedbackCollection.insertOne(feedback);
             res.send(result)
+        });
+        app.get('/class-details/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = {_id: new ObjectId(id)};
+            const found = await classCollection.findOne(query);
+            res.send(found)
         })
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
